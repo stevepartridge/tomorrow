@@ -1,4 +1,8 @@
 # tomorrow
+[![GoDoc](https://godoc.org/github.com/stevepartridge/tomorrow?status.svg)](https://godoc.org/github.com/stevepartridge/tomorrow)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stevepartridge/tomorrow)](https://goreportcard.com/report/github.com/stevepartridge/tomorrow)
+[![Coverage](http://gocover.io/_badge/github.com/stevepartridge/service)](http://gocover.io/github.com/stevepartridge/tomorrow)
+
 A basic Go client for Tomorrow API
 
 

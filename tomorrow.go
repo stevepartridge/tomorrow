@@ -10,15 +10,19 @@ import (
 )
 
 const (
+	// Imperial constant
 	Imperial = "imperial"
-	Metric   = "metric"
+	// Metric constant
+	Metric = "metric"
 )
 
+// Client is the Tomorrow API client struct
 type Client struct {
 	apiKey string
 	units  string
 }
 
+// New is the generic method to create a Tomorrow API client with a provided unit
 func New(units string, apiKey ...string) (*Client, error) {
 	c := Client{
 		apiKey: os.Getenv(EnvAPIKey),
@@ -39,22 +43,27 @@ func New(units string, apiKey ...string) (*Client, error) {
 	return &c, nil
 }
 
+// NewImperial is a helper to use a Tomorrow API client returning imperial (Fahrenheit) values
 func NewImperial(apiKey ...string) (*Client, error) {
 	return New(Imperial, apiKey...)
 }
 
+// NewMetric is a helper to use a Tomorrow API client returning metrics values
 func NewMetric(apiKey ...string) (*Client, error) {
 	return New(Metric, apiKey...)
 }
 
+// Response is the top level object for all Tomorrow API responses
 type Response struct {
 	Data Data `json:"data,omitempty"`
 }
 
+// Data is the common structure for most responses
 type Data struct {
 	Timelines []Timeline `json:"timelines,omitempty"`
 }
 
+// Timeline struct
 type Timeline struct {
 	Timestep  string     `json:"timestep,omitempty"`
 	StartTime time.Time  `json:"startTime,omitempty"`
@@ -62,16 +71,19 @@ type Timeline struct {
 	Intervals []Interval `json:"intervals,omitempty"`
 }
 
+// Interval struct
 type Interval struct {
 	StartTime time.Time `json:"startTime"`
 	Values    Values    `json:"values,omitempty"`
 }
 
+// Timestep struct
 type Timestep struct {
 	StartTime time.Time `json:"startTime,omitempty" yaml:""`
 	Values    Values    `json:"values,omitempty" yaml:""`
 }
 
+// Values struct
 type Values struct {
 	Temperature            float64 `json:"temperature,omitempty" yaml:"temperature"`
 	TemperatureApparent    float64 `json:"temperatureApparent,omitempty"`
@@ -87,6 +99,7 @@ type Values struct {
 	CloudCeiling           float64 `json:"cloudCeiling,omitempty"`
 }
 
+// GetTemp is a basic endpoint helper for retreiving temp intervals for a lat/lng combo
 func (c *Client) GetTemp(lat, lng float64) (Timeline, error) {
 
 	resp, err := c.call(http.MethodGet, "/timelines", nil, map[string]string{
