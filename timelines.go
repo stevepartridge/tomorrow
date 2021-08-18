@@ -24,7 +24,7 @@ func (c *Client) GetTemp(lat, lng float64, opts ...Option) (Timeline, error) {
 		"units":     r.Units,
 		"fields":    strings.Join(r.Fields, ","),
 		"timesteps": r.Timesteps,
-		"location":  fmt.Sprintf("%f,%f", r.Lng, r.Lat),
+		"location":  fmt.Sprintf("%f,%f", r.Lat, r.Lng),
 	})
 
 	if err != nil {
