@@ -8,12 +8,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const (
 	baseAPIv4URL = "https://api.tomorrow.io/v4"
+
+	HeaderRateLimitDay      = "X-RateLimit-Limit-day"
+	HeaderRateLimitHour     = "X-RateLimit-Limit-hour"
+	HeaderRateRemainingDay  = "X-RateLimit-Remaining-day"
+	HeaderRateRemainingHour = "X-RateLimit-Remaining-hour"
 )
 
 func (c *Client) call(method, path string, payload interface{}, query map[string]string) (Response, error) {
@@ -76,8 +82,14 @@ func (c *Client) call(method, path string, payload interface{}, query map[string
 	if err != nil {
 		return Response{}, err
 	}
-
 	result := Response{}
+
+	c.RateLimitDay, _ = strconv.Atoi(resp.Header.Get(HeaderRateLimitDay))
+	c.RateLimitHour, _ = strconv.Atoi(resp.Header.Get(HeaderRateLimitHour))
+	c.RateRemainingDay, _ = strconv.Atoi(resp.Header.Get(HeaderRateRemainingDay))
+	c.RateRemainingHour, _ = strconv.Atoi(resp.Header.Get(HeaderRateRemainingHour))
+
+	fmt.Printf("%+v\n", result)
 
 	err = json.Unmarshal(body, &result)
 	if err != nil {
